@@ -42,5 +42,7 @@ class _HomeState extends State<Home> {
     } catch (e) {
       return null;
     }
+
+    //os tres futures acima são a estrutura base para o banco de dados. Um cria o arquivo, um salva e um ler!
   }
 }
