@@ -23,6 +23,9 @@ class _HomeState extends State<Home> {
 
   List _toDoList = [];
 
+  late Map<String, dynamic> _lastRemoved;
+  late int _lastRemovedPos;
+
   @override
   void initState() {
     super.initState();
@@ -109,7 +112,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget buildItem(context, index) {
+  Widget buildItem(BuildContext context, int index) {
     return Dismissible(
       key: Key(DateTime.now().microsecondsSinceEpoch.toString()),
       background: Container(
@@ -136,6 +139,28 @@ class _HomeState extends State<Home> {
           });
         },
       ),
+      onDismissed: (direction) {
+        setState(() {
+          _lastRemoved = Map.from(_toDoList[index]);
+          _lastRemovedPos = index;
+          _toDoList.removeAt(index);
+          _saveData();
+
+          final snack = SnackBar(
+            content: Text('Terminasse isso \'${_lastRemoved['title']}\' mesmo?'),
+            action: SnackBarAction(
+                label: 'Terminei não',
+                onPressed: () {
+                  setState(() {
+                    _toDoList.insert(_lastRemovedPos, _lastRemoved);
+                    _saveData();
+                  });
+                }),
+            duration: Duration(seconds: 5),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snack);
+        });
+      },
     );
   }
 
