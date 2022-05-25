@@ -101,7 +101,7 @@ class _HomeState extends State<Home> {
                 ),
                 SizedBox(width: 8),
                 RaisedButton(
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.all(17),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
                   onPressed: _addToDo,
@@ -177,6 +177,7 @@ class _HomeState extends State<Home> {
                 }),
             duration: Duration(seconds: 5),
           );
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar(snack);
         });
       },
