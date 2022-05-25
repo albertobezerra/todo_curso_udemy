@@ -19,14 +19,20 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List _toDoList = [
-    'Rola',
-    'Cu',
-    'Rola',
-    'Cu',
-    'Rola',
-    'Cu',
-  ];
+  final _toDoController = TextEditingController();
+
+  List _toDoList = [];
+
+  void _addToDo() {
+    setState(() {
+      Map<String, dynamic> newToDo = Map();
+      newToDo['title'] = _toDoController.text;
+      _toDoController.text = '';
+      newToDo['ok'] = false;
+      _toDoList.add(newToDo);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,6 +49,7 @@ class _HomeState extends State<Home> {
               children: [
                 Expanded(
                   child: TextField(
+                    controller: _toDoController,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
@@ -66,7 +73,7 @@ class _HomeState extends State<Home> {
                   padding: EdgeInsets.all(20),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
-                  onPressed: () {},
+                  onPressed: _addToDo,
                   color: Colors.amberAccent,
                   child: Text(
                     '+',
@@ -84,8 +91,14 @@ class _HomeState extends State<Home> {
             padding: EdgeInsets.only(top: 10),
             itemCount: _toDoList.length,
             itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(_toDoList[index]),
+              return CheckboxListTile(
+                title: Text(_toDoList[index]['title']),
+                value: _toDoList[index]['ok'],
+                secondary: CircleAvatar(
+                  child:
+                      Icon(_toDoList[index]['ok'] ? Icons.check : Icons.error),
+                ),
+                onChanged: (bool? value) {},
               );
             },
           ))
